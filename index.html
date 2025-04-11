@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indicação de Cliente - Skan Hous</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      min-height: 100vh;
+    }
+    .container {
+      display: flex;
+      flex: 1;
+    }
+    .form-section {
+      flex: 1;
+      padding: 40px;
+      background-color: #f8f9fa;
+    }
+    .form-section h2 {
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    textarea {
+      resize: vertical;
+    }
+    .checkbox-group {
+      margin-top: 10px;
+    }
+    button {
+      background-color: #0061ff;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .gallery-section {
+      flex: 1;
+      padding: 40px;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .gallery-section img {
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .qr-code {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-section">
+      <h2>Indicação de Cliente</h2>
+      <form id="leadForm">
+        <div class="form-group">
+          <label for="nomeCliente">Nome do Cliente</label>
+          <input type="text" id="nomeCliente" name="nomeCliente" required>
+        </div>
+        <div class="form-group">
+          <label for="telefoneCliente">Telefone/WhatsApp do Cliente</label>
+          <input type="tel" id="telefoneCliente" name="telefoneCliente" required>
+        </div>
+        <div class="form-group">
+          <label for="emailCliente">E-mail do Cliente (opcional)</label>
+          <input type="email" id="emailCliente" name="emailCliente">
+        </div>
+        <div class="form-group">
+          <label for="nomeCorretor">Nome do Corretor</label>
+          <input type="text" id="nomeCorretor" name="nomeCorretor" required>
+        </div>
+        <div class="form-group">
+          <label for="telefoneCorretor">Telefone do Corretor</label>
+          <input type="tel" id="telefoneCorretor" name="telefoneCorretor" required>
+        </div>
+        <div class="form-group">
+          <label for="terreno">Terreno de Interesse (Lote/Quadra)</label>
+          <input type="text" id="terreno" name="terreno">
+        </div>
+        <div class="form-group">
+          <label for="observacoes">Observações</label>
+          <textarea id="observacoes" name="observacoes" rows="4"></textarea>
+        </div>
+        <div class="checkbox-group">
+          <label><input type="checkbox" required> Confirmo que este cliente foi indicado por mim e autorizou o contato.</label>
+        </div>
+        <br>
+        <button type="submit">Enviar Indicação</button>
+      </form>
+    </div>
+    <div class="gallery-section">
+      <img src="https://via.placeholder.com/400x250?text=Projeto+1" alt="Projeto 1">
+      <img src="https://via.placeholder.com/400x250?text=Projeto+2" alt="Projeto 2">
+      <p><em>Apresente ao seu cliente uma visão concreta de sua futura casa com um estudo completo e personalizado.</em></p>
+      <div class="qr-code">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://seuformulario.com" alt="QR Code">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('leadForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const json = {};
+      formData.forEach((value, key) => { json[key] = value });
+
+      // Envio para Make.com via Webhook
+      fetch('https://hook.us1.make.com/SEU_WEBHOOK_AQUI', {
+        method: 'POST',
+        body: JSON.stringify(json),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(() => {
+        alert('Indicação enviada com sucesso!');
+        document.getElementById('leadForm').reset();
+      }).catch((err) => {
+        alert('Erro ao enviar. Tente novamente.');
+        console.error(err);
+      });
+    });
+  </script>
+</body>
+</html>
